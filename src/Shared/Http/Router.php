@@ -2,6 +2,7 @@
 
 namespace App\Shared\Http;
 
+use App\Domain\Auth\AuthService;
 use App\Shared\Interfaces\HasMiddlewareInterface;
 
 class Router
@@ -13,25 +14,25 @@ class Router
         $this->routes[$method][trim($uri, '/')] = $action;
     }
 
-    public function middleware(string $middleware, array $routes = [])
-    {
-        foreach ($routes as $route) {
-            $route['action'][] = $middleware;
-            $this->add($route['uri'], $route['method'], $route['action']);
-        }
-    }
 
     public function run(): void
     {
         $uri = trim($_SERVER['REQUEST_URI'], '/');
         $method = $_SERVER['REQUEST_METHOD'];
 
+        $authService = new AuthService();
+
+        if ($authService->check() && $method === 'GET' && in_array($uri, ['login', ''])) {
+            http_response_code(302);
+            header("Location: /admin/dashboard");
+            die();
+        }
+
         $action = $this->routes[$method][$uri] ?? null;
 
         if (!$action || !class_exists($action[0]) || !method_exists($action[0], $action[1])) {
             http_response_code(404);
             (new Response())->view('errors/not-found');
-            return;
         }
 
         [$class, $classMethod] = $action;

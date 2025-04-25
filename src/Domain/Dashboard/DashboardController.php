@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Domain;
+namespace App\Domain\Dashboard;
 
 use App\Shared\Interfaces\HasMiddlewareInterface;
 use App\Shared\Http\AuthMiddleware;
 use App\Shared\Http\Response;
 use App\Shared\Http\Request;
+
 
 class DashboardController implements HasMiddlewareInterface
 {

@@ -5,7 +5,7 @@ namespace App\Shared\Database;
 use App\Shared\Http\Response;
 use PDO;
 
-class MySQLDriver
+class MySQLDriver implements DatabaseDriverInterface
 {
     private PDO $connection;
 

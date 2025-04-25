@@ -24,6 +24,7 @@
                             <input class="form-control" id="password" type="password" name="password"
                                    placeholder="Insira sua senha"/>
                         </div>
+                        <?php include(__DIR__ . '/../csrf-token-input.php') ?>
                         <button class="btn btn-primary">Entrar</button>
                     </form>
                 </div>

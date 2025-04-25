@@ -2,7 +2,7 @@
 
 
     <div class="container mt-5">
-        <h2>Olá, Fulano!</h2>
+        <h2>Olá, <?= $_SESSION['user']->name ?>!</h2>
     </div>
 
 

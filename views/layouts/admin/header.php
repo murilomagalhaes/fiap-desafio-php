@@ -17,7 +17,8 @@
 
     <nav class="navbar navbar-expand-lg border-bottom">
         <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -33,11 +34,18 @@
                     </li>
                 </ul>
             </div>
-            <div>
+            <form method="POST" action="/logout">
+                <?php include(__DIR__ . '/../../csrf-token-input.php') ?>
                 <button class="btn">
                     Sair
                     <i class="bi bi-box-arrow-in-right"></i>
                 </button>
-            </div>
+            </form>
         </div>
     </nav>
+
+    <?php if($_SESSION['flash']['message'] ?? null): ?>
+        <div class="p-2 border-bottom">
+            <?= (new \App\Shared\Http\Session())->getFlash()['message'] ?>
+        </div>
+    <?php endif; ?>
