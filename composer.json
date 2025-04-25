@@ -1,0 +1,19 @@
+{
+    "name": "murilomagalhaes/fiap-desafio-php",
+    "description": "FIAP - Desafio PHP",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Murilo Magalhaes",
+            "email": "murilomagalhaes@outlook.com"
+        }
+    ],
+    "require": {
+      "ext-pdo": "*"
+    }
+}
