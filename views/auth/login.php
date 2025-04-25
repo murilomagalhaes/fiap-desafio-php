@@ -10,7 +10,7 @@
             <div class="card shadow-sm">
                 <div class="card-header bg-white">
                     <h2>Login</h2>
-                    <small>Secretaria FIAP</small>
+                    <small>Secretaria <strong class="text-fiap-red">FIAP</strong></small>
                 </div>
                 <div class="card-body p-4">
                     <form class="d-flex flex-column gap-3" method="POST" action="/login">

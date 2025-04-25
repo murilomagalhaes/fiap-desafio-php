@@ -2,7 +2,6 @@
 
 namespace App\Domain\Auth;
 
-use App\Shared\Database\MySQLDriver;
 use App\Shared\Http\Response;
 use App\Shared\Http\Request;
 

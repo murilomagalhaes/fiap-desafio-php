@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Shared\Http;
+
+use App\Shared\Interfaces\HasMiddlewareInterface;
+
 class Router
 {
     private array $routes = [];
@@ -35,10 +38,11 @@ class Router
 
         $controller = new $class();
 
-        $middlewares = array_slice($action, 2);
-
-        foreach ($middlewares as $middleware) {
-            $middleware = new $middleware();
+        if (class_implements($controller, HasMiddlewareInterface::class)) {
+            foreach ($controller->middlewares() as $middleware) {
+                $middleware = new $middleware();
+                $middleware->handle();
+            };
         }
 
         $controller->$classMethod(new Request(), new Response());
