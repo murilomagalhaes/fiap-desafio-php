@@ -1,5 +1,7 @@
 # FIAP - DESAFIO PHP
 
+O desafio consiste em desenvolver uma aplicação para a secretaria de uma escola/faculdade, onde seja possível gerenciar alunos, turmas, e matrículas. Sem a utilização de frameworks ou bibliotecas no back-end.
+
 ## Requisitos:
 
 - MySQL
@@ -64,4 +66,16 @@ Após isso, abra o seu navegador e entre no endereço http://localhost:8000, e v
 - Email: admin@admin.com
 - Senha: admin
 
+## Demonstração
 
+Demonstração em vídeo da utilização do projeto e explicação do código.
+
+https://youtu.be/KoVz6MLc3QQ
+
+[![Demonstração](https://img.youtube.com/vi/KoVz6MLc3QQ/0.jpg)](https://www.youtube.com/watch?v=KoVz6MLc3QQ)
+
+
+- 00:00 - Introdução e configuração do projeto
+- 02:39 - Demonstração do funcionamento
+- 12:38 - Explicação do código
+- 26:24 - Encerramento

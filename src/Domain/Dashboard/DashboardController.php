@@ -22,12 +22,10 @@ class DashboardController implements HasMiddlewareInterface
     {
         $classes = new ClassesModel();
         $students = new StudentsModel();
-        $enrollments = new EnrollmentsModel();
 
         $response->view('dashboard/index', [
             'classes_count' => $classes->count(),
             'students_count' => $students->count(),
-            'enrollments_count' => $enrollments->count()
         ]);
     }
 

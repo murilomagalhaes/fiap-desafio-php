@@ -16,6 +16,7 @@ class StudentsValidation
 
         for ($t = 9; $t < 11; $t++) {
             for ($d = 0, $c = 0; $c < $t; $c++) {
+                // @phpstan-ignore-next-line
                 $d += $cpf[$c] * (($t + 1) - $c);
             }
             $d = ((10 * $d) % 11) % 10;
@@ -55,7 +56,7 @@ class StudentsValidation
         try {
             new \DateTime($birth_date);
         } catch (\Exception $e) {
-            $errors[] = 'A descrição deve conter ao menos 3 caracteres';
+            $errors[] = 'A data de nascimento informada é inválida';
         }
 
         if (!$id) {
@@ -76,25 +77,29 @@ class StudentsValidation
             $errors[] = 'Já existe um estudante com este CPF';
         }
 
-
-        if (
-            (!$id && (strlen($password) < 8))
-            || $id && ($password && strlen($password) < 8)
-        ) {
-            $errors[] = 'A senha deve conter ao menos 8 caracteres';
+        if (!$id && !$password) {
+            $errors[] = 'Digite uma senha';
         }
 
-        if (!preg_match('/[A-Z]/', $password)) {
-            $errors[] = 'A senha deve conter ao menos uma letra maiúscula';
+        if ($password) {
+
+            if (strlen($password) < 8) {
+                $errors[] = 'A senha deve conter ao menos 8 caracteres';
+            }
+            if (!preg_match('/[A-Z]/', $password)) {
+                $errors[] = 'A senha deve conter ao menos uma letra maiúscula';
+            }
+
+            if (!preg_match('/[a-z]/', $password)) {
+                $errors[] = 'A senha deve conter ao menos uma letra minúscula';
+            }
+
+            if (!preg_match('/[\W_]/', $password)) {
+                $errors[] = 'A senha deve conter ao menos um caractere especial';
+            }
+
         }
 
-        if (!preg_match('/[a-z]/', $password)) {
-            $errors[] = 'A senha deve conter ao menos uma letra minúscula';
-        }
-
-        if (!preg_match('/[\W_]/', $password)) {
-            $errors[] = 'A senha deve conter ao menos um caractere especial';
-        }
 
         if (!self::validateCPF($cpf)) {
             $errors[] = 'O CPF informado é inválido';
