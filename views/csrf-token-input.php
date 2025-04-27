@@ -1,1 +1,1 @@
-<input type="hidden" name="csrf-token" value="<?= $_SESSION['csrf-token'] ?>">
+<input type="hidden" name="csrf-token" value="<?= \App\Shared\Http\Session::get('csrf-token') ?>">

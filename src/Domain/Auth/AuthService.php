@@ -7,33 +7,27 @@ use App\Shared\Http\Session;
 
 class AuthService
 {
-    private Session $session;
-
-    public function __construct()
-    {
-        $this->session = new Session();
-    }
 
     public function check(): bool
     {
-        return (bool)$this->session->get('user');
+        return (bool)Session::get('user');
     }
 
     public function getLoggedInUser(): ?\stdClass
     {
-        return $_SESSION['user'] = null;
+        return Session::get('user');
     }
 
     public function attemptLogIn(string $email, string $password): bool
     {
         $staff = new StaffModel();
 
-        $user = $staff->findByEmail($email);
+        $user = $staff->findBy('email', $email);
 
         $validPassword = $user && password_verify($password, $user->password);
 
         if ($validPassword) {
-            $_SESSION['user'] = $user;
+            Session::set('user', $user);
             return true;
         }
 
@@ -42,6 +36,6 @@ class AuthService
 
     public function logout(): void
     {
-        session_destroy();
+        Session::destroy();
     }
 }

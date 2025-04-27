@@ -4,54 +4,62 @@ namespace App\Shared\Http;
 
 class Session
 {
-    public function start(): void
+    public static function start(): void
     {
         session_start();
 
         if (!isset($_SESSION['csrf-token'])) {
-            $_SESSION['csrf-token'] = md5(uniqid('csrf:', 'true'));
+            $_SESSION['csrf-token'] = md5(uniqid('csrf:', true));
         }
 
     }
 
-    public function get(string $key)
+    public static function get(string $key)
     {
         return $_SESSION[$key] ?? null;
     }
 
-    public function set(string $key, $value): void
+    public static function set(string $key, $value): void
     {
         $_SESSION[$key] = $value;
     }
 
-    public function setFlash(array $data)
+    public static function has(string $key): bool
     {
-        $this->set('flash', $data);;
+        return isset($_SESSION[$key]);
     }
 
-    public function getFlash(): ?array
+    public static function hasFlash(string $key): bool
     {
-        $data = $_SESSION['flash'];
+        return isset($_SESSION['flash'][$key]);
+    }
 
-        if ($data) {
-            $this->delete('flash');
-        }
+    public static function setFlash(string $key, $value): void
+    {
+        $_SESSION['flash'][$key] = $value;
+    }
+
+    public static function getFlash(string $key)
+    {
+        $data = $_SESSION['flash'][$key] ?? null;
+
+        if ($data) unset($_SESSION['flash'][$key]);
 
         return $data;
     }
 
-    public function delete($key): void
+    public static function delete($key): void
     {
         unset($_SESSION[$key]);
     }
 
-    public function destroy(): bool
+    public static function destroy(): bool
     {
         return session_destroy();
     }
 
-    public function refreshSessionCsrfToken(): void
+    public static function refreshSessionCsrfToken(): void
     {
-        $_SESSION['csrf-token'] = md5(uniqid('csrf:', 'true'));
+        $_SESSION['csrf-token'] = md5(uniqid('csrf:', true));
     }
 }

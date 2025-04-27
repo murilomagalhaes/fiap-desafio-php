@@ -2,8 +2,7 @@
 
 namespace App\Domain\Auth;
 
-use App\Shared\Http\Response;
-use App\Shared\Http\Request;
+use App\Shared\Http\{Request, Response};
 
 class AuthController
 {
@@ -16,30 +15,42 @@ class AuthController
 
     public function login(Request $request, Response $response): void
     {
-        $_SESSION['csrf-token'] = md5(uniqid());
-
         $response->view('auth/login');
     }
 
     public function attempt(Request $request, Response $response): void
     {
+        $validEmail = $request->validate(['email' => FILTER_VALIDATE_EMAIL])['email'] ?? false;
+
+        $password = $request->get('password');
+
+        if (!$password) {
+            $response->flash('error', 'Digite sua senha')
+                ->redirect('/login');
+        }
+
+        if (!$validEmail) {
+            $response->flash('error', 'Digite um email válido')
+                ->redirect('/login');
+        }
+
         $loggedIn = $this->authService->attemptLogIn(
             $request->get('email'),
             $request->get('password')
         );
 
         if ($loggedIn) {
-
-            $response->status(302)->redirect('/admin/dashboard', ['message' => 'Logged in successfully']);
+            $response->status(302)->redirect('/admin/dashboard');
         }
 
-        $response->status(302)->redirect('/login');
+        $response->flash('error', 'Credenciais inválidas')
+            ->redirect('/login');
     }
 
     public function logout(Request $request, Response $response): void
     {
         $this->authService->logout();
 
-        $response->status(302)->redirect('/login');
+        $response->redirect('/login');
     }
 }

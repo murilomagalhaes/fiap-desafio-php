@@ -2,11 +2,12 @@
 
 namespace App\Shared\Http;
 
-use App\Domain\Auth\AuthService;
 use App\Shared\Interfaces\HasMiddlewareInterface;
+use App\Domain\Auth\AuthService;
 
 class Router
 {
+
     private array $routes = [];
 
     public function add(string $uri, string $method, array $action): void
@@ -17,37 +18,38 @@ class Router
 
     public function run(): void
     {
-        $uri = trim($_SERVER['REQUEST_URI'], '/');
+        $path = parse_url(trim($_SERVER['REQUEST_URI'], '/'))['path'];
         $method = $_SERVER['REQUEST_METHOD'];
 
         $authService = new AuthService();
+        $response = new Response();
 
-        if ($authService->check() && $method === 'GET' && in_array($uri, ['login', ''])) {
-            http_response_code(302);
-            header("Location: /admin/dashboard");
-            die();
+        if ($authService->check() && $method === 'GET' && in_array($path, ['login', ''])) {
+            $response->redirect('/admin/dashboard');
         }
 
-        $action = $this->routes[$method][$uri] ?? null;
-
-        if (!$action || !class_exists($action[0]) || !method_exists($action[0], $action[1])) {
-            http_response_code(404);
-            (new Response())->view('errors/not-found');
+        if (!$authService->check() && $method === 'GET' && !$path) {
+            $response->redirect('login');
         }
+
+        $action = $this->routes[$method][$path] ?? ['', ''];
 
         [$class, $classMethod] = $action;
 
+        if (!class_exists($class) || !method_exists($class, $classMethod)) {
+            $response->status(404)->view('errors/not-found');
+        }
+
         $controller = new $class();
 
-        if (class_implements($controller, HasMiddlewareInterface::class)) {
+        if (in_array(HasMiddlewareInterface::class, class_implements($controller))) {
             foreach ($controller->middlewares() as $middleware) {
                 $middleware = new $middleware();
-                $middleware->handle();
+                $middleware->handle(new Request(), new Response());
             };
         }
 
         $controller->$classMethod(new Request(), new Response());
-
 
     }
 

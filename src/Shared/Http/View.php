@@ -40,12 +40,6 @@ class View
         die();
     }
 
-    public function renderError(string $view, $data = []): void
-    {
-        $this->bypassException = true;
-        $this->render($view, $data);
-    }
-
     public function __get($key)
     {
         return $this->data[$key] ?? null;

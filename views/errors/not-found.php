@@ -1,11 +1,13 @@
 <?php include(__DIR__ . '/../layouts/errors/header.php') ?>
 
-    <h1 class="text-fiap-red">HTTP 404</h1>
-    <h2 class="text-white">Página não encontrada</h2>
+    <div class="text-center">
+        <h1 class="text-fiap-red mb-2">HTTP 404</h1>
+        <h2 class="text-white">Página ou recurso não encontrado</h2>
+    </div>
 
 
 <?php if ($this->message) : ?>
-    <p class="text-white my-4 border p-4 rounded bg-secondary"><?= $this->message ?></p>
+    <p class="text-white my-4 border p-4 rounded bg-secondary text-center"><?= $this->message ?></p>
 <?php endif ?>
 
 

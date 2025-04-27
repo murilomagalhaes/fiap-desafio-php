@@ -2,7 +2,9 @@
 
 namespace App\Shared\Interfaces;
 
+use App\Shared\Http\{Request, Response};
+
 interface MiddlewareInterface
 {
-    public function handle(): void;
+    public function handle(Request $request, Response $response): void;
 }

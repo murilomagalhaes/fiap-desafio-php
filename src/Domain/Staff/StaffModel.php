@@ -6,13 +6,13 @@ use App\Shared\Database\BaseModel;
 
 class StaffModel extends BaseModel
 {
+    protected string $table = 'staff';
 
-    public function findByEmail(string $email): ?\stdClass
-    {
-        $statement = $this->connection->prepare("SELECT * FROM staff WHERE email = :email LIMIT 1");
+    protected array $columns = [
+        'id',
+        'name',
+        'email',
+        'password'
+    ];
 
-        $statement->execute(compact('email'));
-
-        return $statement->fetchObject() ?: null;
-    }
 }

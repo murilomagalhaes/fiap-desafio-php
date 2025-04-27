@@ -6,6 +6,13 @@
             <h1 class="my-auto">FIAP</h1>
         </div>
 
+        <?php if (\App\Shared\Http\Session::hasFlash('error')) : ?>
+            <div class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
+                <?= \App\Shared\Http\Session::getFlash('error') ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
         <div class="col-11 col-md-8 col-xl-6 mt-5 mx-auto">
             <div class="card shadow-sm">
                 <div class="card-header bg-white">
@@ -17,12 +24,12 @@
                         <div class="form-group">
                             <label class="form-label" for="email">Email</label>
                             <input class="form-control" id="email" type="email" name="email"
-                                   placeholder="Insira seu email"/>
+                                   placeholder="Insira seu email" required/>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="password">Senha</label>
                             <input class="form-control" id="password" type="password" name="password"
-                                   placeholder="Insira sua senha"/>
+                                   placeholder="Insira sua senha" required/>
                         </div>
                         <?php include(__DIR__ . '/../csrf-token-input.php') ?>
                         <button class="btn btn-primary">Entrar</button>

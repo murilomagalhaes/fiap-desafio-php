@@ -7,14 +7,12 @@ use App\Domain\Auth\AuthService;
 
 class AuthMiddleware implements MiddlewareInterface
 {
-    public function handle(): void
+    public function handle(Request $request, Response $response): void
     {
         $authService = new AuthService();
 
-        if(!$authService->check()){
-            http_response_code(403);
-            (new Response())->view('errors/forbidden');
-            die();
+        if (!$authService->check()) {
+            $response->status(403)->view('errors/forbidden');;
         }
     }
 }

@@ -8,26 +8,41 @@ class Request
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') return;
 
-        if (isset($_POST['csrf-token']) && $_POST['csrf-token'] === $_SESSION['csrf-token']) {
+        if (isset($_POST['csrf-token']) && $_POST['csrf-token'] === Session::get('csrf-token')) {
             return;
         }
 
-        http_response_code(400);
-        (new Session())->refreshSessionCsrfToken();
-        (new View())->renderError('errors/bad-request', ['message' => "Token CSRF ausente ou inválido"]);;
-        die();
+        Session::refreshSessionCsrfToken();
+
+        (new Response())
+            ->status(400)
+            ->view('errors/bad-request', ['message' => "Token CSRF ausente ou inválido"]);
 
     }
 
-    public function query(string $key)
+    public function validate(array $rules): array
     {
-        return $_GET[$key] ?? null;
+        $filteredInput = filter_input_array(INPUT_POST, $rules);
+
+        foreach ($rules as $key => $rule) {
+            if (!empty($filteredInput[$key])) {
+                $filteredInput[$key] = htmlspecialchars($filteredInput[$key]);
+            }
+        }
+
+        return $filteredInput;
     }
 
-    public function get(string $key)
+
+    public function get(string $key, $default = null): ?string
     {
         $this->validateAndRefreshCsrfToken();
 
-        return $_POST[$key] ?? null;
+        $value = $_POST[$key] ?? $_GET[$key] ?? null;
+
+        if (!$value) return $default;
+
+        return trim(htmlspecialchars($value));
     }
+
 }

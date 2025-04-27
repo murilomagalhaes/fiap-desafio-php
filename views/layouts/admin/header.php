@@ -10,12 +10,12 @@
 </head>
 <body class="bg-light">
 
-<div class="vh-100 d-flex flex-column">
+<div class="pb-5 main">
     <div class="bg-fiap-gray text-fiap-red px-4 py-2">
         <h1 class="my-auto">FIAP</h1>
     </div>
 
-    <nav class="navbar navbar-expand-lg border-bottom">
+    <nav class="navbar navbar-expand-lg border-bottom bg-white shadow-sm">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,14 +23,17 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+                    <li class="nav-item border-end pe-2 me-2">
+                        <a class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/dashboard') !== false ? 'active' : '' ?>"
+                           aria-current="page" href="/admin/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Turmas</a>
+                        <a class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/classes') !== false ? 'active' : '' ?>"
+                           href="/admin/classes">Turmas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Alunos</a>
+                        <a class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/admin/students') !== false ? 'active' : '' ?>"
+                           href="/admin/students">Alunos</a>
                     </li>
                 </ul>
             </div>
@@ -44,8 +47,27 @@
         </div>
     </nav>
 
-    <?php if($_SESSION['flash']['message'] ?? null): ?>
-        <div class="p-2 border-bottom">
-            <?= (new \App\Shared\Http\Session())->getFlash()['message'] ?>
+    <?php if (\App\Shared\Http\Session::hasFlash('success')) : ?>
+        <div class="alert alert-success alert-dismissible fade show rounded-0" role="alert">
+            <?= \App\Shared\Http\Session::getFlash('success') ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
+    <?php if (\App\Shared\Http\Session::hasFlash('error')) : ?>
+        <div class="alert alert-success alert-dismissible fade show rounded-0" role="alert">
+            <?= \App\Shared\Http\Session::getFlash('error') ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
+    <?php if (\App\Shared\Http\Session::hasFlash('errors')) : ?>
+        <div class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
+            <ul class="my-auto">
+                <?php foreach (\App\Shared\Http\Session::getFlash('errors') as $error) : ?>
+                    <li><?= $error ?></li>
+                <?php endforeach; ?>
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>

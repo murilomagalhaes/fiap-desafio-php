@@ -6,14 +6,8 @@ use App\Shared\Exceptions\ViewNotFoundException;
 
 class Response
 {
-    private int $statusCode = 200;
+    private int $statusCode;
 
-    private Session $session;
-
-    public function __construct()
-    {
-        $this->session = new Session();
-    }
 
     public function status(int $statusCode): self
     {
@@ -26,24 +20,28 @@ class Response
     public function view(string $path, array $data = []): void
     {
         try {
-            http_response_code($this->statusCode);
+            if (isset($this->statusCode)) http_response_code($this->statusCode);
             (new View())->render($path, $data);
         } catch (ViewNotFoundException $e) {
-            http_response_code(500);
-            (new View())->renderError('errors/server-error', $data);
+            $this->status(500)->view('errors/server-error', ['message' => $e->getMessage()]);
+
         }
 
     }
 
-    public function redirect(string $to, array $flash = []): void
+    public function flash(string $key, $value): self
     {
-        if ($flash) {
-            $this->session->setFlash($flash);
-        }
+        Session::setFlash($key, $value);
 
-        http_response_code($this->statusCode);
+        return $this;
+    }
+
+    public function redirect(string $to): void
+    {
+        http_response_code(302);
         header("Location: $to");
 
         die();
     }
+
 }
