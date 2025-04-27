@@ -6,6 +6,27 @@ use App\Shared\Http\{Request, Response, Session};
 
 class StudentsValidation
 {
+    public static function validateCPF(string $cpf): bool
+    {
+        $cpf = preg_replace('/[^0-9]/is', '', $cpf);
+
+        if (strlen($cpf) !== 11) return false;
+
+        if (preg_match('/(\d)\1{10}/', $cpf)) return false;
+
+        for ($t = 9; $t < 11; $t++) {
+            for ($d = 0, $c = 0; $c < $t; $c++) {
+                $d += $cpf[$c] * (($t + 1) - $c);
+            }
+            $d = ((10 * $d) % 11) % 10;
+            if ($cpf[$c] != $d) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static function validate(Request $request): void
     {
 
@@ -21,7 +42,9 @@ class StudentsValidation
 
         $errors = [];
 
-        if (!empty($request->validate(['email' => FILTER_VALIDATE_EMAIL])['email'])) {
+        $validEmail = $request->validate(['email' => FILTER_VALIDATE_EMAIL])['email'] ?? false;
+
+        if (!$validEmail) {
             $errors[] = 'Digite um email válido';
         }
 
@@ -59,6 +82,22 @@ class StudentsValidation
             || $id && ($password && strlen($password) < 8)
         ) {
             $errors[] = 'A senha deve conter ao menos 8 caracteres';
+        }
+
+        if (!preg_match('/[A-Z]/', $password)) {
+            $errors[] = 'A senha deve conter ao menos uma letra maiúscula';
+        }
+
+        if (!preg_match('/[a-z]/', $password)) {
+            $errors[] = 'A senha deve conter ao menos uma letra minúscula';
+        }
+
+        if (!preg_match('/[\W_]/', $password)) {
+            $errors[] = 'A senha deve conter ao menos um caractere especial';
+        }
+
+        if (!self::validateCPF($cpf)) {
+            $errors[] = 'O CPF informado é inválido';
         }
 
         if (empty($errors)) return;

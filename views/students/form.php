@@ -39,7 +39,8 @@
                     <label class="form-label required" for="cpf">CPF</label>
                     <input value="<?= $this->student->cpf ?? '' ?>" type="text" class="form-control" name="cpf"
                            id="cpf"
-                           placeholder="Email" required>
+                           data-maska="###.###.###-##"
+                           placeholder="CPF" required>
                 </div>
                 <div class="form-group mb-3">
                     <label class="form-label required" for="data_de_nascimento">Data de Nascimento</label>
@@ -124,6 +125,13 @@
             </form>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/maska@3/dist/cdn/maska.js"></script>
+    <script>
+        const {MaskInput} = Maska
+
+        new MaskInput("[data-maska]");
+    </script>
 
 
 <?php include(__DIR__ . '/../layouts/admin/footer.php') ?>
