@@ -20,7 +20,7 @@ class ClassesController implements HasMiddlewareInterface
     public function index(Request $request, Response $response): void
     {
         $page = (int)$request->get('page') ?: 1;
-        $search = $request->get('search');
+        $search = $request->get('search', '');
 
         $response->view('classes/index', [
             'classes' => (new ClassesModel())->paginateWithStudentsCount($page, 10, $search)
