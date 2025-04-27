@@ -1,4 +1,4 @@
 .env
-.composer.lock.json
+.composer.lock
 vendor
 .idea
