@@ -32,6 +32,8 @@ abstract class BaseModel
         array  $params = []
     ): \stdClass
     {
+        if ($page < 1) $page = 1;
+
         $offset = ($page - 1) * $perPage;
 
         $totalPages = (int)ceil($this->count($where, $params) / $perPage);
@@ -110,7 +112,9 @@ abstract class BaseModel
         $statement = $this->connection
             ->prepare("UPDATE `{$this->table}` SET {$values} WHERE id = :id");
 
-        $statement->execute([... $allowedData, 'id' => $id]);
+        $allowedData['id'] = $id;
+
+        $statement->execute($allowedData);
 
         return $this->findBy('id', $id);
     }

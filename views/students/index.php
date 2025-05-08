@@ -20,7 +20,7 @@
             <div class="card-body">
                 <form class="input-group mb-4" action="/admin/students" method="GET">
                     <input type="text" class="form-control" placeholder="Pesquisar por nome"
-                           aria-label="Nome da turma" name="search" aria-describedby="btn-search">
+                           aria-label="Nome da turma" name="search" aria-describedby="btn-search" value="<?= $_GET['search'] ?? '' ?>">
                     <a class="btn btn-outline-secondary" id="btn-reload" href="/admin/students">
                         <i class="bi bi-arrow-clockwise"></i>
                     </a>

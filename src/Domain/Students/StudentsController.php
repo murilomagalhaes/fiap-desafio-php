@@ -20,6 +20,9 @@ class StudentsController implements HasMiddlewareInterface
     public function index(Request $request, Response $response): void
     {
         $page = (int)$request->get('page') ?: 1;
+
+        if ($page < 1) $response->redirect('/admin/students');
+
         $search = $request->get('search', '');
 
         $response->view('students/index', [

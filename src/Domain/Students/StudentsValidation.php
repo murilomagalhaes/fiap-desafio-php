@@ -6,8 +6,10 @@ use App\Shared\Http\{Request, Response, Session};
 
 class StudentsValidation
 {
-    public static function validateCPF(string $cpf): bool
+    public static function validateCPF(?string $cpf = null): bool
     {
+        if (!$cpf) return false;
+
         $cpf = preg_replace('/[^0-9]/is', '', $cpf);
 
         if (strlen($cpf) !== 11) return false;
@@ -54,7 +56,13 @@ class StudentsValidation
         }
 
         try {
-            new \DateTime($birth_date);
+            $birthDateObj = new \DateTime($birth_date);
+            $twelveYearsAgo = new \DateTime('-12 years');
+
+            if ($birthDateObj > $twelveYearsAgo) {
+                $errors[] = 'O estudante deve ter mais de 12 anos';
+            }
+
         } catch (\Exception $e) {
             $errors[] = 'A data de nascimento informada é inválida';
         }
@@ -109,10 +117,7 @@ class StudentsValidation
 
         Session::setFlash('errors', $errors);
 
-        $response->view(
-            'students/form',
-            ['student' => (object)compact('id', 'name', 'email', 'cpf', 'birth_date')]
-        );
+        $response->redirect("/admin/students/form?id=$id");
 
 
     }

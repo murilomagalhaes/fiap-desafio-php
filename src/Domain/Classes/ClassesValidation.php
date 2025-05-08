@@ -37,11 +37,7 @@ class ClassesValidation
 
         Session::setFlash('errors', $errors);
 
-        $response->view(
-            'classes/form',
-            ['class' => (object)compact('id', 'name', 'description')]
-        );
-
+        $response->redirect("/admin/classes/form?id=$id");
 
     }
 }
