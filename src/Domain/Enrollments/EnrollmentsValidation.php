@@ -19,6 +19,11 @@ class EnrollmentsValidation
         $class = (new ClassesModel())->findBy('id', $classId);
         $alreadyEnrolled = (new EnrollmentsModel())->count('WHERE student_id = :studentId AND class_id = :classId', compact('studentId', 'classId'));
 
+        if (!$classId || !$studentId) {
+            $response->flash('error', 'Aluno ou turma inválidos')
+                ->redirect('/admin/classes');
+        }
+
         if ($alreadyEnrolled) {
             $response->flash('error', "Aluno já matriculado nesta turma")
                 ->redirect("/admin/classes/form?id=$classId");;

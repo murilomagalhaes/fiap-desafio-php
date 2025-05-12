@@ -1,9 +1,11 @@
+<?php $student = \App\Shared\Http\Session::getFlash('old') ?? $this->student; ?>
+
 <?php include(__DIR__ . '/../layouts/admin/header.php') ?>
 
     <div class="container">
 
         <form class="card" method="POST" autocomplete="off"
-              action="<?= $this->student->id ?? false ? "/admin/students/update" : '/admin/students/create' ?>">
+              action="<?= $student->id ?? false ? "/admin/students/update" : '/admin/students/create' ?>">
             <div class="card-header">
                 <div class="d-flex align-items-center justify-content-between">
                     <h5>Aluno</h5>
@@ -12,7 +14,7 @@
                             <i class="bi bi-box-arrow-left me-2"></i>
                             Voltar
                         </a>
-                        <?php if ($this->student->id ?? false) : ?>
+                        <?php if ($student->id ?? false) : ?>
                             <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="modal"
                                     data-bs-target="#enrollmentModal">
                                 <i class="bi bi-journals me-2"></i>
@@ -25,26 +27,26 @@
             <div class="card-body">
                 <div class="form-group mb-3">
                     <label class="form-label required" for="nome">Nome</label>
-                    <input value="<?= $this->student->name ?? '' ?>" type="text" class="form-control" name="nome"
+                    <input value="<?= $student->name ?? '' ?>" type="text" class="form-control" name="nome"
                            id="nome"
                            placeholder="Nome do aluno" required>
                 </div>
                 <div class="form-group mb-3">
                     <label class="form-label required" for="email">Email</label>
-                    <input value="<?= $this->student->email ?? '' ?>" type="email" class="form-control" name="email"
+                    <input value="<?= $student->email ?? '' ?>" type="email" class="form-control" name="email"
                            id="email"
                            placeholder="Email" required>
                 </div>
                 <div class="form-group mb-3">
                     <label class="form-label required" for="cpf">CPF</label>
-                    <input value="<?= $this->student->cpf ?? '' ?>" type="text" class="form-control" name="cpf"
+                    <input value="<?= $student->cpf ?? '' ?>" type="text" class="form-control" name="cpf"
                            id="cpf"
                            data-maska="###.###.###-##"
                            placeholder="CPF" required>
                 </div>
                 <div class="form-group mb-3">
                     <label class="form-label required" for="data_de_nascimento">Data de Nascimento</label>
-                    <input value="<?= $this->student->birth_date ?? '' ?>" type="date" class="form-control"
+                    <input value="<?= $student->birth_date ?? '' ?>" type="date" class="form-control"
                            name="data_de_nascimento"
                            id="data_de_nascimento"
                            required>
@@ -56,8 +58,8 @@
                            placeholder="Senha de acesso">
                 </div>
                 <?php include(__DIR__ . '/../csrf-token-input.php') ?>
-                <?php if ($this->student->id ?? false) : ?>
-                    <input type="hidden" name="id" value="<?= $this->student->id ?>">
+                <?php if ($student->id ?? false) : ?>
+                    <input type="hidden" name="id" value="<?= $student->id ?>">
                 <?php endif; ?>
             </div>
             <div class="card-footer text-end">

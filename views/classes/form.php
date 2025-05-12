@@ -1,9 +1,11 @@
+<?php $class = \App\Shared\Http\Session::getFlash('old') ?? $this->class; ?>
+
 <?php include(__DIR__ . '/../layouts/admin/header.php') ?>
 
     <div class="container">
 
         <form class="card" method="POST" autocomplete="off"
-              action="<?= $this->class->id ?? false ? "/admin/classes/update" : '/admin/classes/create' ?>">
+              action="<?= $class->id ?? false ? "/admin/classes/update" : '/admin/classes/create' ?>">
             <div class="card-header">
                 <div class="d-flex align-items-center justify-content-between">
                     <h5>Turma</h5>
@@ -12,7 +14,7 @@
                             <i class="bi bi-box-arrow-left me-1"></i>
                             Voltar
                         </a>
-                        <?php if ($this->class->id ?? false) : ?>
+                        <?php if ($class->id ?? false) : ?>
                             <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="modal"
                                     data-bs-target="#enrollmentModal">
                                 <i class="bi bi-journals me-2"></i>
@@ -25,18 +27,18 @@
             <div class="card-body">
                 <div class="form-group mb-3">
                     <label class="form-label required" for="nome">Nome</label>
-                    <input value="<?= $this->class->name ?? '' ?>" type="text" class="form-control" name="nome"
+                    <input value="<?= $class->name ?? '' ?>" type="text" class="form-control" name="nome"
                            id="nome"
                            placeholder="Nome da turma" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label required" for="descricao">Descrição</label>
                     <textarea class="form-control" rows="5" name="descricao" id="descricao" placeholder="Descrição"
-                              required><?= $this->class->description ?? '' ?></textarea>
+                              required><?= $class->description ?? '' ?></textarea>
                 </div>
                 <?php include(__DIR__ . '/../csrf-token-input.php') ?>
-                <?php if ($this->class->id ?? false) : ?>
-                    <input type="hidden" name="id" value="<?= $this->class->id ?>">
+                <?php if ($class->id ?? false) : ?>
+                    <input type="hidden" name="id" value="<?= $class->id ?>">
                 <?php endif; ?>
             </div>
             <div class="card-footer text-end">

@@ -37,7 +37,17 @@ class ClassesValidation
 
         Session::setFlash('errors', $errors);
 
-        $response->redirect("/admin/classes/form?id=$id");
+        Session::setFlash('old', (object)[
+            'id' => $id,
+            'name' => $name,
+            'description' => $description,
+        ]);
+
+        $idParam = "";
+
+        if ($id) $idParam = "?id=$id";
+
+        $response->redirect("/admin/classes/form$idParam");
 
     }
 }

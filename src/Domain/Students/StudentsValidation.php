@@ -117,7 +117,19 @@ class StudentsValidation
 
         Session::setFlash('errors', $errors);
 
-        $response->redirect("/admin/students/form?id=$id");
+        Session::setFlash('old', (object)[
+            'id' => $id,
+            'name' => $name,
+            'email' => $email,
+            'cpf' => $cpf,
+            'birth_date' => $birth_date,
+        ]);
+
+        $idParam = "";
+
+        if ($id) $idParam = "?id=$id";
+
+        $response->redirect("/admin/students/form$idParam");
 
 
     }
